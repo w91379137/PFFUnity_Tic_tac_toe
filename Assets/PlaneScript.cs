@@ -4,13 +4,22 @@ using System.Collections;
 public class PlaneScript : MonoBehaviour {
 
 	public GameObject plane;
-	public Rigidbody rb;
+
+	public int count_x;
+	public int count_z;
+
+	public float lenght;
 
 	void Start () {
-		
-		for (int x = 0; x < 10; x++) {
-			Debug.Log (x);
+		for (int x = -count_x; x <= count_x; x++) {
+			for (int z = -count_z; z <= count_z; z++) {
+				GameObject add = Helper.CreatePlaneXZ ((float)x - lenght/2, (float)z + lenght/2, lenght, lenght);
 
+				add.transform.Translate(0, 0.01f, 0);
+
+				//add.transform.Translate(0, Random.Range(0.0f, 1.0f), 0);
+				add.GetComponent<Renderer>().material.color = new Vector4( Mathf.Abs((float)x / (float)count_x) , Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 0.5f);
+			}
 		}
 	}
 
@@ -24,12 +33,9 @@ public class PlaneScript : MonoBehaviour {
 
 			//顯示 紅線
 			Debug.DrawLine (ray.origin, hit.point, Color.red, 0.1f, true);
+			Debug.Log (hit.transform.name);
 
-			if (hit.rigidbody != null && hit.rigidbody == rb) {
-				
-				//在 log 中輸出被點到的 名稱
-				Debug.Log (hit.transform.name);
-			}
+			hit.transform.Translate(0, 0.05f, 0);
 		}
 	}
 }
